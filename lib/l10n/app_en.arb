@@ -1,0 +1,33 @@
+{
+  "@@locale": "en",
+  "appName": "NetguruCR",
+  "@appName": {
+    "description": "The app name"
+  },
+  "appNameString": "AppName: {name}",
+  "@appNameString": {
+    "description": "Just the string 'AppName' with param",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "NetguruProd"
+      }
+    }
+  },
+  "packageSuffix": "PackageSuffix: {packageSuffix}",
+  "@packageSuffix": {
+    "placeholders": {
+      "packageSuffix": {
+        "type": "String"
+      }
+    }
+  },
+  "baseUrl": "BaseUrl: {baseUrl}",
+  "@baseUrl": {
+    "placeholders": {
+      "baseUrl": {
+        "type": "String"
+      }
+    }
+  }
+}
