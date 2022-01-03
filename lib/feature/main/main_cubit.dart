@@ -1,38 +1,54 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:netguru_flutter_template/service/mock_api_service.dart';
 
-@LazySingleton()
+@Injectable()
 class MainCubit extends Cubit<MainState> {
-  MockApiService mockApiService;
+  final MockApiService _mockApiService;
 
-  MainCubit(this.mockApiService) : super(Init());
+  MainCubit(this._mockApiService) : super(Init());
 
   void fetchListItems() async {
     emit(Loading());
-    (await mockApiService.getItems()).fold(
+    (await _mockApiService.getItems()).fold(
       (error) => emit(Error(error)),
-      (list) => emit(Fetched(list)),
+      (list) {
+        print('============================');
+        print(list.length.toString());
+        print('============================');
+        emit(Fetched(list.map(
+        (s) {
+          if (list.indexOf(s) % 2 == 0) s = 'I don\'t like even numbers';
+          return s;
+        },
+      ).toList()));
+      },
     );
   }
 }
 
-class MainState {}
+@immutable
+abstract class MainState {
+  const MainState();
+}
 
-class Init extends MainState {}
+class Init extends MainState {
+  const Init();
+}
 
-class Loading extends MainState {}
+class Loading extends MainState {
+  const Loading();
+}
 
 class Fetched extends MainState {
-  List<String> list;
+  final List<String> list;
 
   Fetched(this.list);
 }
 
 class Error extends MainState {
-  Exception error;
+  final Exception error;
 
   Error(this.error);
 }

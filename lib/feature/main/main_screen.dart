@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netguru_flutter_template/app/s.dart';
 import 'package:netguru_flutter_template/feature/main/main_cubit.dart';
 import 'package:netguru_flutter_template/injection/injection.dart';
+import 'package:netguru_flutter_template/values/app_strings.dart';
+import 'package:netguru_flutter_template/values/dimensions.dart';
 import 'package:netguru_flutter_template/widget/custom_loading/custom_loading.dart';
 import 'package:netguru_flutter_template/values/app_theme.dart';
 
@@ -17,26 +18,28 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  MainCubit? mainCubit;
-
-  bool isLoading = false;
+  late final MainCubit mainCubit;
 
   @override
   void initState() {
     mainCubit = getIt.get<MainCubit>();
-    mainCubit?.fetchListItems();
+    mainCubit.fetchListItems();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    mainCubit.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCubit>(
-      create: (context) => mainCubit!,
+      create: (context) => mainCubit,
       child: BlocConsumer<MainCubit, MainState>(
         listener: (BuildContext context, state) {
-          setState(() {
-            isLoading = state is Loading;
-          });
+          if (state is Loading) setState(() {});
         },
         builder: (BuildContext context, state) => Scaffold(
           appBar: AppBar(
@@ -46,38 +49,14 @@ class _MainScreenState extends State<MainScreen> {
           body: Center(
             child: Stack(
               children: [
-                state is Loading ? CustomLoading() : SizedBox(),
-                state is Error ? Text(state.error.toString()) : SizedBox(),
+                state is Loading ? CustomLoading() :const SizedBox(),
+                state is Error ? Text(state.error.toString()) :const SizedBox(),
                 if (state is Fetched)
-                  ListView(
-                      children: state.list.map(
-                    (s) {
-                      if (state.list.indexOf(s) % 2 == 0)
-                        s = 'I dont like even numbers';
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Container(
-                          color: Colors.green,
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/splash_image.png',
-                                    height: 50,
-                                  ),
-                                  Text(s),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ).toList()),
+                  ListView.builder(
+                    itemBuilder: (context, index) =>
+                        _buildCard(index: index, context: context),
+                    itemCount: state.list.length,
+                  ),
               ],
             ),
           ),
@@ -86,3 +65,33 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+Widget _buildCard({
+  required int index,
+  required BuildContext context,
+}) =>
+    Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(
+        Radius.circular(Dimensions.SIZE_20),
+      )),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(Dimensions.SIZE_8),
+        color: context.backgroundColor(),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  AppStrings.SPLASH_IMAGE,
+                  height: Dimensions.SIZE_50,
+                ),
+                Text('${index + 1}'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );

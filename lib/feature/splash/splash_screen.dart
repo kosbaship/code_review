@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:netguru_flutter_template/feature/splash/splash_bloc.dart';
 import 'package:netguru_flutter_template/injection/injection.dart';
+import 'package:netguru_flutter_template/values/dimensions.dart';
 import 'package:netguru_flutter_template/widget/custom_loading/custom_loading.dart';
 import 'package:netguru_flutter_template/values/app_theme.dart';
 
-import '../../values/dimensions.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -38,12 +38,12 @@ class SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Icon(
               Icons.bug_report,
-              size: 150,
+              size: Dimensions.SIZE_150,
               color: context.primaryColor(),
             ),
             SizedBox(
-              width: 200,
-              height: 200,
+              width: Dimensions.SIZE_200,
+              height: Dimensions.SIZE_200,
               child: CustomLoading(),
             ),
           ],
