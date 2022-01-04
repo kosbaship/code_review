@@ -1,23 +1,35 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
 class MockApiService {
-  List<String> get items => _generateListItems();
+  late final List<String> items;
 
   Future<Either<Exception, List<String>>> getItems() async {
-    await Future.delayed(const Duration(seconds: 1));
     final showError = Random().nextBool();
     if (showError) {
-      return left(Exception('Something went wrong ¯\_(ツ)_/¯'));
-    } else
+      return left(_SomethingWrong());
+    } else {
       return right(items);
+    }
   }
 
+  Future<void> createIsolate() async {
+    final List<String> result = await compute(computeMethod, 2);
+    result.forEach((element) => items.add(element));
+  }
 
-  List<String> _generateListItems() =>
-      [for (int i = 0; i < 4; i++) 'My List Item nr $i'];
+  static Future<List<String>>? computeMethod(int seconds) async {
+    await Future.delayed(Duration(seconds: seconds));
+    return [for (int i = 0; i < 4; i++) 'My List Item nr $i'];
+  }
 }
 
+class _SomethingWrong implements Exception {
+  @override
+  String toString() => 'Something went wrong ¯\_(ツ)_/¯';
+}
