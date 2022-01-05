@@ -10,11 +10,12 @@ class MockApiService {
   final List<String> items = [];
 
   Future<Either<Exception, List<String>>> getItems() async {
-    await createIsolate();
+    await Future.delayed(const Duration(seconds: 1));
     final showError = Random().nextBool();
     if (showError) {
       return left(_SomethingWrong());
     } else {
+      await createIsolate();
       return right(items);
     }
   }
@@ -25,7 +26,7 @@ class MockApiService {
   }
 
   static Future<List<String>> computeMethod(List<String> items) async {
-    await Future.delayed(const Duration(seconds: 1));
+
     return [for (int i = 0; i < 99 ; i++) 'My List Item nr $i'];//9999999
   }
 }
