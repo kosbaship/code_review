@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
                 if (state is Fetched)
                   ListView.builder(
                     itemBuilder: (context, index) =>
-                        _buildCard(index: index, context: context),
+                        _buildCard(index: index, context: context, state:state),
                     itemCount: state.list.length,
                   ),
               ],
@@ -69,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
 Widget _buildCard({
   required int index,
   required BuildContext context,
+  required Fetched state,
 }) =>
     Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -88,7 +89,7 @@ Widget _buildCard({
                   AppStrings.SPLASH_IMAGE,
                   height: Dimensions.SIZE_50,
                 ),
-                Text('${index + 1}'),
+                Text('${state.list[index]}'),
               ],
             ),
           ],

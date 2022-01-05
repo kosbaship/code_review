@@ -14,15 +14,15 @@ class MainCubit extends Cubit<MainState> {
     (await _mockApiService.getItems()).fold(
       (error) => emit(Error(error)),
       (list) {
-        print('============================');
-        print(list.length.toString());
-        print('============================');
-        emit(Fetched(list.map(
-        (s) {
-          if (list.indexOf(s) % 2 == 0) s = 'I don\'t like even numbers';
-          return s;
-        },
-      ).toList()));
+        final List<String> ls = list.map(
+          (s) {
+            if (list.indexOf(s) % 2 == 0) {
+              s = 'I don\'t like even numbers';
+            }
+            return s;
+          },
+        ).toList();
+        emit(Fetched(ls));
       },
     );
   }
