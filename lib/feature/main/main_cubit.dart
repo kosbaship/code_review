@@ -15,12 +15,12 @@ class MainCubit extends Cubit<MainState> {
     (await _mockApiService.getItems()).fold(
       (error) => emit(Error(error)),
       (list) async {
-        emit(Fetched(await compute(mappingInDiffIsolate, list)));
+        emit(Fetched(await compute(_mappingInDiffIsolate, list)));
       },
     );
   }
 
-  static List<String> mappingInDiffIsolate(List<String> list) {
+  static List<String> _mappingInDiffIsolate(List<String> list) {
     return list.map(
       (s) {
         print('====================');

@@ -14,11 +14,11 @@ class MockApiService {
     if (showError) {
       return left(_SomethingWrong());
     } else {
-      return right(await compute(mockNetworkRequest, items));
+      return right(await compute(_mockNetworkRequest, items));
     }
   }
 
-  static List<String> mockNetworkRequest(List<String> items) {
+  static List<String> _mockNetworkRequest(List<String> items) {
     return [for (int i = 0; i < 9999999; i++) 'My List Item nr $i']; //9999999
   }
 }
