@@ -27,3 +27,12 @@ In `mock_api_service.dart`:
 2. Too long lines
 3. Duration should be const
 4. showError should be final not var
+
+
+[user]
+name = Mohamed M. Kosba
+email = mohamed.kobsa96@gmail.com
+username = kosbaship
+[github]
+user = kosbaship
+token = token
