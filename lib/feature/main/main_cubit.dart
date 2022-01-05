@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:netguru_flutter_template/service/mock_api_service.dart';
@@ -13,18 +14,24 @@ class MainCubit extends Cubit<MainState> {
     emit(Loading());
     (await _mockApiService.getItems()).fold(
       (error) => emit(Error(error)),
-      (list) {
-        final List<String> ls = list.map(
-          (s) {
-            if (list.indexOf(s) % 2 == 0) {
-              s = 'I don\'t like even numbers';
-            }
-            return s;
-          },
-        ).toList();
-        emit(Fetched(ls));
+      (list) async {
+        emit(Fetched(await compute(mappingInDiffIsolate, list)));
       },
     );
+  }
+
+  static List<String> mappingInDiffIsolate(List<String> list) {
+    return list.map(
+      (s) {
+        print('====================');
+        print("$s");
+        print('====================');
+        if (list.indexOf(s) % 2 == 0) {
+          s = 'I don\'t like even numbers';
+        }
+        return s;
+      },
+    ).toList();
   }
 }
 

@@ -7,26 +7,19 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton()
 class MockApiService {
-  final List<String> items = [];
-
   Future<Either<Exception, List<String>>> getItems() async {
+    final List<String> items = [];
     await Future.delayed(const Duration(seconds: 1));
     final showError = Random().nextBool();
     if (showError) {
       return left(_SomethingWrong());
     } else {
-      await createIsolate();
-      return right(items);
+      return right(await compute(mockNetworkRequest, items));
     }
   }
 
-  Future<void> createIsolate() async {
-    final List<String> result = await compute(computeMethod, items);
-    result.forEach((element) => items.add(element));
-  }
-
-  static List<String> computeMethod(List<String> items) {
-    return [for (int i = 0; i < 99; i++) 'My List Item nr $i']; //9999999
+  static List<String> mockNetworkRequest(List<String> items) {
+    return [for (int i = 0; i < 9999999; i++) 'My List Item nr $i']; //9999999
   }
 }
 
