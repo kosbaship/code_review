@@ -9,6 +9,7 @@ import 'routing/compass.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         navigatorKey: getIt.get<Compass>().navigatorKey,
         theme: lightTheme(),
         darkTheme: darkTheme(),
