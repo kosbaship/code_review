@@ -25,9 +25,8 @@ class MockApiService {
     result.forEach((element) => items.add(element));
   }
 
-  static Future<List<String>> computeMethod(List<String> items) async {
-
-    return [for (int i = 0; i < 99 ; i++) 'My List Item nr $i'];//9999999
+  static List<String> computeMethod(List<String> items) {
+    return [for (int i = 0; i < 99; i++) 'My List Item nr $i']; //9999999
   }
 }
 
